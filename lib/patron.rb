@@ -9,7 +9,7 @@ class Patron
   def self.all
     returned_patrons = DB.exec("SELECT * FROM patrons;")
     patrons = []
-    returned_patrons.each() do |patrons|
+    returned_patrons.each() do |patron|
       name = patron.fetch("name")
       id = patron.fetch("id").to_i
       patrons.push(Patron.new({:name => name, :id => id}))
@@ -23,7 +23,7 @@ class Patron
   end
 
   def ==(patron_to_compare)
-    self.id() == patron_to_compare.id()
+    self.id().to_i == patron_to_compare.id().to_i
   end
 
   def self.find(id)
@@ -43,13 +43,13 @@ class Patron
   end
 
   def books
-    results = DB.exec("SELECT book_id from books_patrons where patron_id = #{id};")
+    results = DB.exec("SELECT book_id from books_patrons where patron_id = #{@id};")
     books_ids = ''
     results.each do |result|
-      patron_ids << (result.fetch("patron_id")) + ", "
+      books_ids << (result.fetch("book_id")) + ", "
     end
     if books_ids != ""
-      books = DB.exec("SELECT * FROM books WHERE id IN (#{books_ids.slice(0, (albums_ids.length - 2))});")
+      books = DB.exec("SELECT * FROM books WHERE id IN (#{books_ids.slice(0, (books_ids.length - 2))});")
       book_objects = []
       books.each() do |hash|
         id = hash.fetch("id").to_i
@@ -62,7 +62,7 @@ class Patron
   end
 
   def link_patron_book(book_id)
-    book = DB.exec("SELECT * FROM books WHERE id = #{book_id}";).first
+    book = DB.exec("SELECT * FROM books WHERE id = #{book_id};").first
     if book != nil
       DB.exec("INSERT into books_patrons (book_id, patron_id) VALUES (#{book['id'].to_i}, #{@id});")
     else

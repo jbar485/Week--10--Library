@@ -18,17 +18,6 @@ describe '#patron' do
     end
   end
 
-  describe('.clear') do
-    it("clears all patrons") do
-      patron = Patron.new({:name => "A Love Supreme", :id => nil})
-      patron.save()
-      patron2 = Patron.new({:name => "Blue", :id => nil})
-      patron2.save()
-      Patron.clear
-      expect(Patron.all).to(eq([]))
-    end
-  end
-
   describe('#==') do
     it("is the same patron if it has the same attributes as another patron") do
       patron = Patron.new({:name => "Blue", :id => nil})
@@ -47,11 +36,11 @@ describe '#patron' do
     end
   end
 
-  describe('#update_name') do
+  describe('#update') do
     it("updates an patron by id") do
       patron = Patron.new({:name => "A Love Supreme", :id => nil})
       patron.save()
-      patron.update_name("A Love Supreme")
+      patron.update("A Love Supreme")
       expect(patron.name).to(eq("A Love Supreme"))
     end
   end
@@ -67,23 +56,15 @@ describe '#patron' do
     end
   end
 
-  describe('#update') do
-    it("adds an album to an patron") do
-      patron = Patron.new({:name => "John Coltrane", :id => nil})
+  describe('#books') do
+    it("returns all books that a patron has") do
+      patron = Patron.new({:name => "A Love Supreme", :id => nil})
       patron.save()
-      patron.update({:album_name => "A Love Supreme"})
-      expect(patron.albums).not_to(eq([]))
+      book = Book.new({:name => "Harry Potter", :id => nil, :return_date => "2017-07-23", :checkout_date => "2016-07-23"})
+      book.save()
+      patron.link_patron_book(book.id)
+      expect(patron.books).to(eq([book]))
     end
   end
-
-  describe('#update') do
-    it("adds an album to an patron") do
-      patron = Patron.new({:name => "John Coltrane", :id => nil})
-      patron.save()
-      patron.update({:album_name => "A Love Supreme"})
-      expect(patron.albums).not_to(eq([]))
-    end
-  end
-
 
 end
