@@ -1,0 +1,13 @@
+<h3><%= @patron.name %><h3>
+  <a href="/patrons/<%= @patron.id %>/edit">Edit Account</a>
+  <h3>Books checked out:</h3>
+  <% if @books != nil %>
+  <ul>
+    <% @books.each do |book| %>
+    <li><a href="/patrons/<%= @patron.id %>/books/<%= book.id %>"><%= book.name %></a></li>
+    <% end %>
+  </ul>
+  <% else %>
+  <p>There are currently no books to display.</p>
+  <% end %>
+  <a href="patrons/:id/books">Checkout a Book</a>

@@ -1,0 +1,11 @@
+<h3>Members:</h3>
+<% if @patrons != nil %>
+<ul>
+  <% @patrons.each do |patron| %>
+  <li><a href="/patrons/<%= patron.id %>"><%= patron.name %></a></li>
+  <% end %>
+</ul>
+<% else %>
+<p>There are currently no patrons to display.</p>
+<% end %>
+<a href="/patrons/new">Add a Patron</a>

@@ -1,0 +1,12 @@
+<h3><%= @author.name %><h3>
+  <a href="/authors/<%= @author.id %>/edit">Edit Author</a>
+  <h4>Books:</h4>
+  <% if @books != nil %>
+  <ul>
+    <% @books.each do |book| %>
+    <li><a href="/books/<%= @book.id %>"><%= book.name %></a></li>
+    <% end %>
+  </ul>
+  <% else %>
+  <p>There are currently no books to display.</p>
+  <% end %>

@@ -1,0 +1,17 @@
+<h3>Update <%= @patron.name %></h3>
+
+
+<form action="/patrons/<%= @patron.id%>" method="post">
+  <input name="_method" type="hidden" value="patch">
+
+  <label for="name">Rename patron</label>
+  <input id="name" name="name" type="text">
+
+  <button type="submit">Update</button>
+</form>
+
+<form action="/patrons/<%= @patron.id() %>" method="post">
+  <input name="_method" type="hidden" value="delete">
+
+  <button type="submit">Delete Account</button>
+</form>
