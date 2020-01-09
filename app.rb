@@ -22,7 +22,6 @@ get ("/admin")do
 @books = Book.all
 @authors = Author.all
 @patrons = Patron.all
-# binding.pry
 erb(:librarian_options)
 end
 
@@ -144,9 +143,6 @@ end
 patch("/patrons/:id/books/:book_id/checkout") do
   patron = Patron.find(params[:id])
   book = Book.find(params[:book_id])
-  date = Date.today
-  DB.exec("UPDATE books set checkout_date =CURRENT_TIMESTAMP WHERE id = #{params[:book_id]};")
-  DB.exec("UPDATE books set return_date =CURRENT_DATE + INTERVAL '7 days'  WHERE id = #{params[:book_id]};")
   patron.link_patron_book(params[:book_id])
   redirect to("/patrons/"+patron.id)
 end

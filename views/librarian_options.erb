@@ -93,7 +93,7 @@
 <ul>
   <% @patrons.each do |patron| %>
   <li><a href="/patrons/<%= patron.id %>"><%= patron.name %></a></li>
-  <% if patron.overdue_books.any? == true %>
+  <% if patron.overdue_books != nil %>
   <p>Overdue Books</p>
   <ul>
 
@@ -102,7 +102,7 @@
 </ul>
   <%end%>
   <%else %>
-<p>test</p>
+
   <%end%>
   <% end %>
 </ul>
@@ -131,7 +131,6 @@
 </ul>
   <%end%>
   <%else %>
-<p>test</p>
   <%end%>
   <% end %>
   <a href="/admin">Reset Search</a>
