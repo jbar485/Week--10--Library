@@ -146,7 +146,9 @@ ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 CREATE TABLE public.books_patrons (
     patron_id integer,
     book_id integer,
-    id integer NOT NULL
+    id integer NOT NULL,
+    checkout_date timestamp without time zone,
+    return_date timestamp without time zone
 );
 
 
@@ -249,6 +251,8 @@ ALTER TABLE ONLY public.patrons ALTER COLUMN id SET DEFAULT nextval('public.patr
 --
 
 COPY public.authors (name, id) FROM stdin;
+jkasdasd	5
+,,,,,	6
 \.
 
 
@@ -257,6 +261,11 @@ COPY public.authors (name, id) FROM stdin;
 --
 
 COPY public.authors_books (author_id, book_id, id) FROM stdin;
+5	6	1
+4	6	2
+6	6	3
+5	8	4
+5	6	5
 \.
 
 
@@ -265,7 +274,12 @@ COPY public.authors_books (author_id, book_id, id) FROM stdin;
 --
 
 COPY public.books (name, id, patron_id, return_date, checkout_date) FROM stdin;
-Harry Potter	5	\N	2001-01-01 00:00:00	0001-01-01 00:00:00
+BOok 3	10	\N	2001-01-01 00:00:00	0001-01-01 00:00:00
+BOok 4	11	\N	9999-01-01 00:00:00	9999-01-01 00:00:00
+BOok 5	12	\N	2020-01-16 00:00:00	2020-01-09 11:39:01.771014
+Book 2	9	\N	2020-01-16 00:00:00	2020-01-09 12:10:25.44524
+Harry Potter	6	\N	2020-01-16 00:00:00	2020-01-09 12:38:54.416089
+Book	8	\N	2020-01-16 00:00:00	2020-01-09 12:53:57.802277
 \.
 
 
@@ -273,7 +287,20 @@ Harry Potter	5	\N	2001-01-01 00:00:00	0001-01-01 00:00:00
 -- Data for Name: books_patrons; Type: TABLE DATA; Schema: public; Owner: Guest
 --
 
-COPY public.books_patrons (patron_id, book_id, id) FROM stdin;
+COPY public.books_patrons (patron_id, book_id, id, checkout_date, return_date) FROM stdin;
+14	6	1	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	6	2	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	6	3	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	9	4	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	9	5	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	8	6	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	12	7	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	6	8	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+15	8	11	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	6	12	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+14	6	13	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+15	12	15	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
+15	6	16	2020-01-09 13:54:58.99409	2020-01-16 00:00:00
 \.
 
 
@@ -282,10 +309,8 @@ COPY public.books_patrons (patron_id, book_id, id) FROM stdin;
 --
 
 COPY public.patrons (name, id, password) FROM stdin;
-Judah	3	\N
-Test	4	123
-Tim	5	password
-Calvin	6	456
+judah	14	judah
+Calvin	15	123
 \.
 
 
@@ -293,35 +318,35 @@ Calvin	6	456
 -- Name: authors_books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('public.authors_books_id_seq', 1, false);
+SELECT pg_catalog.setval('public.authors_books_id_seq', 5, true);
 
 
 --
 -- Name: authors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('public.authors_id_seq', 1, true);
+SELECT pg_catalog.setval('public.authors_id_seq', 6, true);
 
 
 --
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('public.books_id_seq', 5, true);
+SELECT pg_catalog.setval('public.books_id_seq', 12, true);
 
 
 --
 -- Name: books_patrons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('public.books_patrons_id_seq', 1, false);
+SELECT pg_catalog.setval('public.books_patrons_id_seq', 16, true);
 
 
 --
 -- Name: patrons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('public.patrons_id_seq', 6, true);
+SELECT pg_catalog.setval('public.patrons_id_seq', 15, true);
 
 
 --

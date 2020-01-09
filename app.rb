@@ -8,14 +8,15 @@ require("pg")
 require('./lib/patron')
 
 DB = PG.connect({:dbname => "library"})
+
+
 get("/") do
   erb(:main_page)
 end
 
-
 get("/patrons")do
-  @patrons = Patron.all()
-  erb(:patrons)
+@patrons = Patron.all()
+erb(:patrons)
 end
 
 get ("/admin")do
@@ -26,44 +27,40 @@ erb(:librarian_options)
 end
 
 get("/admin/add_book")do
-  erb(:new_book)
+erb(:new_book)
 end
+
 get("/admin/add_author")do
-  erb(:new_author)
+erb(:new_author)
 end
 
 get("/admin/books/:id")do
-  @book = Book.find(params[:id])
-  @authors = @book.authors
-  erb(:book_admin)
+@book = Book.find(params[:id])
+@authors = @book.authors
+erb(:book_admin)
 end
 
 get("/admin/authors/:id")do
-  @author = Author.find(params[:id])
-  @books = @author.books
-  erb(:author_admin)
+@author = Author.find(params[:id])
+@books = @author.books
+erb(:author_admin)
 end
 
 get("/patrons/:id/books")do
-  @patron = Patron.find(params[:id])
-  @books = Book.all()
-  erb(:books)
-end
-
-get("/patrons/:id/authors")do
-  @authors = Author.all()
-  erb(:authors)
+@patron = Patron.find(params[:id])
+@books = Book.all()
+erb(:books)
 end
 
 get("/patrons/new")do
-  erb(:new_patron)
+erb(:new_patron)
 end
 
 post("/patrons")do
-  patron = Patron.new({:name => params[:patron_name], :password => params[:patron_password] , :id => nil})
-  patron.save
-  account = Patron.find(patron.id)
-  redirect to("/patrons/"+account.id)
+patron = Patron.new({:name => params[:patron_name], :password => params[:patron_password] , :id => nil})
+patron.save
+account = Patron.find(patron.id)
+redirect to("/patrons/"+account.id)
 end
 
 post("/admin/search/author")do
@@ -79,7 +76,7 @@ authors.each do |author|
 end
 @books = Book.all
 @patrons = Patron.all
-  erb(:librarian_options)
+erb(:librarian_options)
 end
 
 post("/admin/search/book")do
@@ -95,7 +92,7 @@ books.each do |book|
 end
 @authors = Author.all
 @patrons = Patron.all
-  erb(:librarian_options)
+erb(:librarian_options)
 end
 
 post("/admin/search/patron")do
@@ -111,33 +108,32 @@ patrons.each do |patron|
 end
 @authors = Author.all
 @books = Book.all
-  erb(:librarian_options)
+erb(:librarian_options)
 end
 
-
 post("/admin/add_book")do
-  book = Book.new({:name => params[:book_name], :return_date => "9999-01-01", :checkout_date => "9999-01-01", :id => nil})
-  book.save
-  redirect to("/admin")
+book = Book.new({:name => params[:book_name], :return_date => "9999-01-01", :checkout_date => "9999-01-01", :id => nil})
+book.save
+redirect to("/admin")
 end
 
 post("/admin/new_author")do
-  author = Author.new({:name => params[:author_name], :id => nil})
-  author.save
-  redirect to("/admin")
+author = Author.new({:name => params[:author_name], :id => nil})
+author.save
+redirect to("/admin")
 end
 
 get("/patrons/:id")do
-  @patron = Patron.find(params[:id])
-  @books = @patron.books()
-  erb(:patron)
+@patron = Patron.find(params[:id])
+@books = @patron.books()
+erb(:patron)
 end
 
 get("/patrons/:id/books/:book_id")do
 @patron = Patron.find(params[:id])
-  @book = Book.find(params[:book_id])
-  @authors = @book.authors()
-  erb(:book)
+@book = Book.find(params[:book_id])
+@authors = @book.authors()
+erb(:book)
 end
 
 patch("/patrons/:id/books/:book_id/checkout") do
@@ -154,24 +150,22 @@ patch("/patrons/:id/books/:book_id/return") do
 end
 
 get("/patrons/:id/authors/:author_id")do
-  @patron = Patron.find(params[:id])
-  @author = Author.find(params[:author_id])
-  @books = @author.books()
-  erb(:author)
+@patron = Patron.find(params[:id])
+@author = Author.find(params[:author_id])
+@books = @author.books()
+erb(:author)
 end
 
 get("/patrons/:id/edit")do
-  @patron = Patron.find(params[:id])
-  erb(:edit_patron)
+@patron = Patron.find(params[:id])
+erb(:edit_patron)
 end
-
 
 patch("/patrons/:id")do
 @patron = Patron.find(params[:id])
 @patron.update(params[:name], params[:password])
 erb(:patron)
 end
-
 
 get("/admin/books/:book_id/edit")do
   @book = Book.find(params[:book_id])
@@ -191,7 +185,6 @@ patch("/admin/authors/:author_id/add_book") do
   redirect("/admin/authors/"+params[:author_id])
 end
 
-
 patch("/admin/books/:book_id")do
 @book = Book.find(params[:book_id])
 @book.update(params[:name])
@@ -203,7 +196,6 @@ get("/admin/authors/:author_id/edit")do
   @books = Book.all
   erb(:edit_author)
 end
-
 
 patch("/admin/authors/:author_id")do
 @author = Author.find(params[:author_id])
@@ -247,7 +239,5 @@ patch("/patrons") do
     @patron = Patron.find(results.pop)
     redirect to ("/patrons/"+@patron.id)
   end
-
-
 
 end
