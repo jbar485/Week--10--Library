@@ -9,3 +9,10 @@
   <% else %>
   <p>There are currently no authors to display.</p>
   <% end %>
+  <br>
+  <a href="/patrons/<%= @patron.id %>">Home</a>
+
+  <form action="/patrons/<%= @patron.id %>/books/<%= @book.id %>/checkout" method="post">
+    <input name="_method" type="hidden" value="patch">
+    <button type="submit" name="button">Checkout</button>
+  </form>

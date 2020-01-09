@@ -10,6 +10,19 @@
   <button type="submit">Update</button>
 </form>
 
+<form action="/admin/authors/<%= @author.id%>/add_book" method="post">
+  <input name="_method" type="hidden" value="patch">
+
+  <label for="book">Select Book</label>
+  <% @books.each do |book| %>
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="book" id="book" value="<%= book.id %>">
+    <label class="form-check-label" for="book"> <%= book.name %> </label>
+  </div>
+  <% end %>
+  <button type="submit" class="btn btn-warning">ADD</button>
+</form>
+
 <form action="/admin/authors/<%= @author.id() %>" method="post">
   <input name="_method" type="hidden" value="delete">
 

@@ -5,6 +5,7 @@
   <ul>
     <% @books.each do |book| %>
     <li><a href="/patrons/<%= @patron.id %>/books/<%= book.id %>"><%= book.name %></a></li>
+    <p>Due on <%= book.return_date.slice(0, (book.return_date.length - 8)) %></p>
     <% end %>
   </ul>
   <% else %>

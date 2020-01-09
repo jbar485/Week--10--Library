@@ -5,7 +5,7 @@
 <h3>All Books</h3>
 <% if @search_books.nil? == true %>
 <% if @books.any? %>
-<h3>Search for Book</h3>
+<h5>Search for Book</h5>
 <form class="book_search" action="/admin/search/book" method="post">
   <label for="book_search">Book Name</label>
   <input type="text" name="book_search">
@@ -22,7 +22,7 @@
 <% end %>
 <% else %>
 <% if @books.any? %>
-<h3>Search for Book</h3>
+<h5>Search for Book</h5>
 <form class="book_search" action="/admin/search/book" method="post">
   <label for="book_search">Book Name</label>
   <input type="text" name="book_search">
@@ -44,7 +44,7 @@
 <h3>Authors</h3>
 <% if @search_authors.nil? == true %>
 <% if @authors.any? %>
-<h3>Search for Author</h3>
+<h5>Search for Author</h5>
 <form class="author_search" action="/admin/search/author" method="post">
   <label for="author_search">Author Name</label>
   <input type="text" name="author_search">
@@ -61,7 +61,7 @@
 <% end %>
 <% else %>
 <% if @authors.any? %>
-<h3>Search for Author</h3>
+<h5>Search for Author</h5>
 <form class="author_search" action="/admin/search/author" method="post">
   <label for="author_search">Author Name</label>
   <input type="text" name="author_search">
@@ -78,4 +78,53 @@
 <p>There are currently no authors to display.</p>
 <a href="/admin">Reset Search</a>
 <% end %>
+<% end %>
+
+<h3>Members</h3>
+<% if @search_patrons.nil? == true %>
+<% if @patrons.any? %>
+<h5>Search for Member</h5>
+<form class="patron_search" action="/admin/search/patron" method="post">
+  <label for="patron_search">Member Name</label>
+  <input type="text" name="patron_search">
+  <button type="submit" name="button">Search</button>
+</form>
+
+<ul>
+  <% @patrons.each do |patron| %>
+  <li><a href="/patrons/<%= patron.id %>"><%= patron.name %></a></li>
+  <% end %>
+</ul>
+<% else %>
+<p>There are currently no members to display.</p>
+<% end %>
+<% else %>
+<% if @patrons.any? %>
+<h5>Search for Member</h5>
+<form class="patron_search" action="/admin/search/patron" method="post">
+  <label for="patron_search">Member Name</label>
+  <input type="text" name="patron_search">
+  <button type="submit" name="button">Search</button>
+</form>
+
+<ul>
+  <% @patrons.each do |patron| %>
+  <li><a href="/patrons/<%= patron.id %>"><%= patron.name %></a></li>
+  <% end %>
+  <a href="/admin">Reset Search</a>
+</ul>
+<% else %>
+<p>There are currently no members to display.</p>
+<a href="/admin">Reset Search</a>
+<% end %>
+<% end %>
+<h3>Over Due Books</h3>
+<% if @overdue_books.any? %>
+<ul>
+  <% @overdue_books.each do |book| %>
+  <li><%= book.name %></li>
+  <% end %>
+</ul>
+<% else %>
+<p>There are currently no overdue books.</p>
 <% end %>

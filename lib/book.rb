@@ -1,6 +1,6 @@
 class Book
   attr_accessor :name
-  attr_reader :id
+  attr_reader :id, :checkout_date, :return_date
   def initialize(attributes)
     @name = attributes.fetch(:name)
     @id = attributes.fetch(:id)

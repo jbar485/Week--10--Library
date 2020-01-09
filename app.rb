@@ -22,6 +22,11 @@ get ("/admin")do
 @books = Book.all
 @authors = Author.all
 @patrons = Patron.all
+@overdue_books = []
+result = DB.exec("SELECT * FROM books where return_date < CURRENT_TIMESTAMP;")
+result.each do |book|
+  @overdue_books.push(Book.new({:name => book.fetch("name"), :id =>book.fetch("id"), :return_date => book.fetch("return_date"), :checkout_date => book.fetch("checkout_date")}))
+end
 erb(:librarian_options)
 end
 
@@ -40,6 +45,7 @@ end
 
 get("/admin/authors/:id")do
   @author = Author.find(params[:id])
+  @books = @author.books
   erb(:author_admin)
 end
 
@@ -97,20 +103,27 @@ end
   erb(:librarian_options)
 end
 
-get("/patrons/:id/books/new")do
-@patron = Patron.find(params[:id])
-  erb(:new_book)
+post("/admin/search/patron")do
+@search_patrons = params[:patron_search]
+results = DB.exec("SELECT * FROM patrons WHERE name ILIKE '%#{params[:patron_search]}%';")
+patrons = []
+results.each do |result|
+  patrons.push(result)
 end
+@patrons = []
+patrons.each do |patron|
+  @patrons.push(Patron.new({:name => patron.fetch("name"), :id =>patron.fetch("id"), :password => patron.fetch("password")}))
+end
+@authors = Author.all
+@books = Book.all
+  erb(:librarian_options)
+end
+
 
 post("/admin/add_book")do
-  book = Book.new({:name => params[:book_name], :return_date => "1-01-01", :checkout_date => "0001-01-01", :id => nil})
+  book = Book.new({:name => params[:book_name], :return_date => "9999-01-01", :checkout_date => "9999-01-01", :id => nil})
   book.save
   redirect to("/admin")
-end
-
-get("/patrons/:id/authors/new")do
-@patron = Patron.find(params[:id])
-  erb(:new_author)
 end
 
 post("/admin/new_author")do
@@ -130,6 +143,16 @@ get("/patrons/:id/books/:book_id")do
   @book = Book.find(params[:book_id])
   @authors = @book.authors()
   erb(:book)
+end
+
+patch("/patrons/:id/books/:book_id/checkout") do
+  patron = Patron.find(params[:id])
+  book = Book.find(params[:book_id])
+  date = Date.today
+  DB.exec("UPDATE books set checkout_date =CURRENT_TIMESTAMP WHERE id = #{params[:book_id]};")
+  DB.exec("UPDATE books set return_date =CURRENT_DATE + INTERVAL '7 days'  WHERE id = #{params[:book_id]};")
+  patron.link_patron_book(params[:book_id])
+  redirect to("/patrons/"+patron.id)
 end
 
 get("/patrons/:id/authors/:author_id")do
@@ -154,7 +177,20 @@ end
 
 get("/admin/books/:book_id/edit")do
   @book = Book.find(params[:book_id])
+  @authors = Author.all
   erb(:edit_book)
+end
+
+patch("/admin/books/:book_id/add_author") do
+  book = Book.find(params[:book_id])
+  book.link_book_author(params[:author])
+  redirect to("/admin/books/"+book.id)
+end
+
+patch("/admin/authors/:author_id/add_book") do
+  book = Book.find(params[:book])
+  book.link_book_author(params[:author_id])
+  redirect("/admin/authors/"+params[:author_id])
 end
 
 
@@ -166,6 +202,7 @@ end
 
 get("/admin/authors/:author_id/edit")do
   @author = Author.find(params[:author_id])
+  @books = Book.all
   erb(:edit_author)
 end
 
