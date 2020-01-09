@@ -1,6 +1,6 @@
 <h3>Add an Author</h3>
 
-<form action="/authors" method="post">
+<form action="/patrons/<%= @patron.id %>/authors" method="post">
   <div class="form-group">
     <label for="author_name">Name</label>
     <input id="n" name="author_name" class="form-control" type="text">

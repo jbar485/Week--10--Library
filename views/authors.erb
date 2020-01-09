@@ -2,10 +2,10 @@
 <% if @authors.any? %>
 <ul>
   <% @authors.each do |author| %>
-  <li><a href="/authors/<%= author.id %>"><%= author.name %></a></li>
+  <li><a href="/patrons/<%= @patron.id %>/authors/<%= author.id %>"><%= author.name %></a></li>
   <% end %>
 </ul>
 <% else %>
 <p>There are currently no authors to display.</p>
 <% end %>
-<a href="/authors/new">Add an Author</a>
+<a href="/patrons/<%= @patron.id %>/authors/new">Add an Author</a>

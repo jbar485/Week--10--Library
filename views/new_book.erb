@@ -1,6 +1,6 @@
 <h3>Add a Book</h3>
 
-<form action="/books" method="post">
+<form action="/patrons/<%= @patron.id %>/books" method="post">
   <div class="form-group">
     <label for="book_name">Name</label>
     <input id="n" name="book_name" class="form-control" type="text">

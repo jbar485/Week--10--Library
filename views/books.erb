@@ -2,10 +2,10 @@
 <% if @books.any? %>
 <ul>
   <% @books.each do |book| %>
-  <li><a href="/books/<%= book.id %>"><%= book.name %></a></li>
+  <li><a href="/patrons/<%= @patron.id %>/books/<%= book.id %>"><%= book.name %></a></li>
   <% end %>
 </ul>
 <% else %>
 <p>There are currently no books to display.</p>
 <% end %>
-<a href="/books/new">Add a Book</a>
+<a href="/patrons/<%= @patron.id %>/books/new">Add a Book</a>

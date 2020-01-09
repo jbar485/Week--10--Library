@@ -3,6 +3,7 @@ class Patron
   attr_reader :id
   def initialize(attributes)
     @name = attributes.fetch(:name)
+    @password = attributes.fetch(:password)
     @id = attributes.fetch(:id)
   end
 
@@ -11,14 +12,15 @@ class Patron
     patrons = []
     returned_patrons.each() do |patron|
       name = patron.fetch("name")
+      password = patron.fetch("password")
       id = patron.fetch("id").to_i
-      patrons.push(Patron.new({:name => name, :id => id}))
+      patrons.push(Patron.new({:name => name, :password => password, :id => id}))
     end
     patrons
   end
 
   def save
-    result = DB.exec("INSERT INTO patrons (name) VALUES ('#{@name}') RETURNING id;")
+    result = DB.exec("INSERT INTO patrons (name, password) VALUES ('#{@name}', '#{@password}') RETURNING id;")
     @id = result.first().fetch("id").to_i
   end
 
@@ -29,13 +31,20 @@ class Patron
   def self.find(id)
     patron = DB.exec("SELECT * FROM patrons WHERE id = #{id};").first
     name = patron.fetch('name')
+    password = patron.fetch("password")
     id = patron.fetch('id')
-    Patron.new({:name => name, :id => id})
+    Patron.new({:name => name, :password => password, :id => id})
   end
 
-  def update(name)
-    @name = name
+  def update(name, password)
+    if name != ""
+      @name = name
+    end
+    if password != ""
+      @password = password
+    end
     DB.exec("Update patrons SET name = '#{@name}' WHERE id =#{@id};")
+    DB.exec("Update patrons SET password = '#{@password}' WHERE id =#{@id};")
   end
 
   def delete

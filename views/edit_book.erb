@@ -1,7 +1,7 @@
 <h3>Update <%= @book.name %></h3>
 
 
-<form action="/books/<%= @book.id%>" method="post">
+<form action="/patrons/<%= @patron.id %>/books/<%= @book.id%>" method="post">
   <input name="_method" type="hidden" value="patch">
 
   <label for="name">Rename book</label>
@@ -10,7 +10,7 @@
   <button type="submit">Update</button>
 </form>
 
-<form action="/books/<%= @book.id() %>" method="post">
+<form action="/patrons/<%= @patron.id %>/books/<%= @book.id() %>" method="post">
   <input name="_method" type="hidden" value="delete">
 
   <button type="submit">Delete Book</button>
