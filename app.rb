@@ -22,11 +22,7 @@ get ("/admin")do
 @books = Book.all
 @authors = Author.all
 @patrons = Patron.all
-@overdue_books = []
-result = DB.exec("SELECT * FROM books where return_date < CURRENT_TIMESTAMP;")
-result.each do |book|
-  @overdue_books.push(Book.new({:name => book.fetch("name"), :id =>book.fetch("id"), :return_date => book.fetch("return_date"), :checkout_date => book.fetch("checkout_date")}))
-end
+# binding.pry
 erb(:librarian_options)
 end
 

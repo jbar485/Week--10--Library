@@ -93,6 +93,17 @@
 <ul>
   <% @patrons.each do |patron| %>
   <li><a href="/patrons/<%= patron.id %>"><%= patron.name %></a></li>
+  <% if patron.overdue_books.any? == true %>
+  <p>Overdue Books</p>
+  <ul>
+
+  <% patron.overdue_books.each do |book| %>
+<li><%= book.name%></li>
+</ul>
+  <%end%>
+  <%else %>
+<p>test</p>
+  <%end%>
   <% end %>
 </ul>
 <% else %>
@@ -110,6 +121,18 @@
 <ul>
   <% @patrons.each do |patron| %>
   <li><a href="/patrons/<%= patron.id %>"><%= patron.name %></a></li>
+  <% if patron.overdue_books.any? == true %>
+  <p>Overdue Books</p>
+  <ul>
+
+  <% patron.overdue_books.each do |book| %>
+<li><%= book.name%></li>
+<h3>test</h3>
+</ul>
+  <%end%>
+  <%else %>
+<p>test</p>
+  <%end%>
   <% end %>
   <a href="/admin">Reset Search</a>
 </ul>
@@ -117,14 +140,4 @@
 <p>There are currently no members to display.</p>
 <a href="/admin">Reset Search</a>
 <% end %>
-<% end %>
-<h3>Over Due Books</h3>
-<% if @overdue_books.any? %>
-<ul>
-  <% @overdue_books.each do |book| %>
-  <li><%= book.name %></li>
-  <% end %>
-</ul>
-<% else %>
-<p>There are currently no overdue books.</p>
 <% end %>

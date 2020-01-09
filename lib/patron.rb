@@ -79,7 +79,24 @@ class Patron
     end
   end
 
-
+def overdue_books
+  results = DB.exec("SELECT book_id from books_patrons where patron_id = #{@id};")
+  books_ids = ''
+  results.each do |result|
+    books_ids << (result.fetch("book_id")) + ", "
+  end
+  if books_ids != ""
+    books = DB.exec("SELECT * FROM books WHERE id IN (#{books_ids.slice(0, (books_ids.length - 2))}) AND return_date < CURRENT_TIMESTAMP;")
+    book_objects = []
+    books.each() do |hash|
+      id = hash.fetch("id").to_i
+      book_objects.push(Book.find(id))
+    end
+    return book_objects
+  else
+    nil
+  end
+end
 
 
 end

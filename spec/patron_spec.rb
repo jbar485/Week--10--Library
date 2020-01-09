@@ -67,4 +67,15 @@ describe '#patron' do
     end
   end
 
+  describe('#books') do
+    it("returns all books that a patron has") do
+      patron = Patron.new({:name => "A Love Supreme", :password => "rats", :id => nil})
+      patron.save()
+      book = Book.new({:name => "Harry Potter", :id => nil, :return_date => "2015-07-23", :checkout_date => "2016-07-23"})
+      book.save()
+      patron.link_patron_book(book.id)
+      expect(patron.overdue_books).to(eq([book]))
+    end
+  end
+
 end
