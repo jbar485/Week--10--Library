@@ -1,9 +1,10 @@
 <h3><%= @book.name %><h3>
+  <a href="/admin/books/<%= @book.id %>/edit">Edit Book</a>
   <h4>By:</h4>
   <% if @authors != nil %>
   <ul>
     <% @authors.each do |author| %>
-    <li><a href="/patrons/<%= @patron.id %>/authors/<%= author.id %>"><%= author.name %></a></li>
+    <li><a href="/admin/authors/<%= author.id %>"><%= author.name %></a></li>
     <% end %>
   </ul>
   <% else %>

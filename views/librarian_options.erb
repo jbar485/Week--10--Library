@@ -1,0 +1,81 @@
+<a href="/admin/add_book">Add book</a>
+<br>
+<a href="/admin/add_author">Add Author</a>
+<br>
+<h3>All Books</h3>
+<% if @search_books.nil? == true %>
+<% if @books.any? %>
+<h3>Search for Book</h3>
+<form class="book_search" action="/admin/search/book" method="post">
+  <label for="book_search">Book Name</label>
+  <input type="text" name="book_search">
+  <button type="submit" name="button">Search</button>
+</form>
+
+<ul>
+  <% @books.each do |book| %>
+  <li><a href="/admin/books/<%= book.id %>"><%= book.name %></a></li>
+  <% end %>
+</ul>
+<% else %>
+<p>There are currently no books to display.</p>
+<% end %>
+<% else %>
+<% if @books.any? %>
+<h3>Search for Book</h3>
+<form class="book_search" action="/admin/search/book" method="post">
+  <label for="book_search">Book Name</label>
+  <input type="text" name="book_search">
+  <button type="submit" name="button">Search</button>
+</form>
+
+<ul>
+  <% @books.each do |book| %>
+  <li><a href="/admin/books/<%= book.id %>"><%= book.name %></a></li>
+  <% end %>
+  <a href="/admin">Reset Search</a>
+</ul>
+<% else %>
+<p>There are currently no books to display.</p>
+<a href="/admin">Reset Search</a>
+<% end %>
+<% end %>
+
+<h3>Authors</h3>
+<% if @search_authors.nil? == true %>
+<% if @authors.any? %>
+<h3>Search for Author</h3>
+<form class="author_search" action="/admin/search/author" method="post">
+  <label for="author_search">Author Name</label>
+  <input type="text" name="author_search">
+  <button type="submit" name="button">Search</button>
+</form>
+
+<ul>
+  <% @authors.each do |author| %>
+  <li><a href="/admin/authors/<%= author.id %>"><%= author.name %></a></li>
+  <% end %>
+</ul>
+<% else %>
+<p>There are currently no authors to display.</p>
+<% end %>
+<% else %>
+<% if @authors.any? %>
+<h3>Search for Author</h3>
+<form class="author_search" action="/admin/search/author" method="post">
+  <label for="author_search">Author Name</label>
+  <input type="text" name="author_search">
+  <button type="submit" name="button">Search</button>
+</form>
+
+<ul>
+  <% @authors.each do |author| %>
+  <li><a href="/admin/authors/<%= author.id %>"><%= author.name %></a></li>
+  <% end %>
+  <a href="/admin">Reset Search</a>
+</ul>
+<% else %>
+<p>There are currently no authors to display.</p>
+<a href="/admin">Reset Search</a>
+<% end %>
+<% end %>

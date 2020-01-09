@@ -18,6 +18,31 @@ get("/patrons")do
   erb(:patrons)
 end
 
+get ("/admin")do
+@books = Book.all
+@authors = Author.all
+@patrons = Patron.all
+erb(:librarian_options)
+end
+
+get("/admin/add_book")do
+  erb(:new_book)
+end
+get("/admin/add_author")do
+  erb(:new_author)
+end
+
+get("/admin/books/:id")do
+  @book = Book.find(params[:id])
+  @authors = @book.authors
+  erb(:book_admin)
+end
+
+get("/admin/authors/:id")do
+  @author = Author.find(params[:id])
+  erb(:author_admin)
+end
+
 get("/patrons/:id/books")do
   @patron = Patron.find(params[:id])
   @books = Book.all()
@@ -36,7 +61,40 @@ end
 post("/patrons")do
   patron = Patron.new({:name => params[:patron_name], :password => params[:patron_password] , :id => nil})
   patron.save
-  redirect to("/patrons")
+  account = Patron.find(patron.id)
+  redirect to("/patrons/"+account.id)
+end
+
+post("/admin/search/author")do
+@search_authors = params[:author_search]
+results = DB.exec("SELECT * FROM authors WHERE name ILIKE '%#{params[:author_search]}%';")
+authors = []
+results.each do |result|
+  authors.push(result)
+end
+@authors = []
+authors.each do |author|
+  @authors.push(Author.new({:name => author.fetch("name"), :id =>author.fetch("id")}))
+end
+@books = Book.all
+@patrons = Patron.all
+  erb(:librarian_options)
+end
+
+post("/admin/search/book")do
+@search_books = params[:book_search]
+results = DB.exec("SELECT * FROM books WHERE name ILIKE '%#{params[:book_search]}%';")
+books = []
+results.each do |result|
+  books.push(result)
+end
+@books = []
+books.each do |book|
+  @books.push(Book.new({:name => book.fetch("name"), :id =>book.fetch("id"), :return_date => book.fetch("return_date"), :checkout_date => book.fetch("checkout_date")}))
+end
+@authors = Author.all
+@patrons = Patron.all
+  erb(:librarian_options)
 end
 
 get("/patrons/:id/books/new")do
@@ -44,10 +102,10 @@ get("/patrons/:id/books/new")do
   erb(:new_book)
 end
 
-post("/patrons/:id/books")do
+post("/admin/add_book")do
   book = Book.new({:name => params[:book_name], :return_date => "1-01-01", :checkout_date => "0001-01-01", :id => nil})
   book.save
-  redirect to("/books")
+  redirect to("/admin")
 end
 
 get("/patrons/:id/authors/new")do
@@ -55,10 +113,10 @@ get("/patrons/:id/authors/new")do
   erb(:new_author)
 end
 
-post("/patrons/:id/authors")do
+post("/admin/new_author")do
   author = Author.new({:name => params[:author_name], :id => nil})
   author.save
-  redirect to("/authors")
+  redirect to("/admin")
 end
 
 get("/patrons/:id")do
@@ -89,35 +147,33 @@ end
 
 patch("/patrons/:id")do
 @patron = Patron.find(params[:id])
-@patron.update(params[:name])
+@patron.update(params[:name], params[:password])
 erb(:patron)
 end
 
 
-get("/patrons/:id/books/:book_id/edit")do
-@patron = Patron.find(params[:id])
+get("/admin/books/:book_id/edit")do
   @book = Book.find(params[:book_id])
   erb(:edit_book)
 end
 
 
-patch("/patrons/:id/books/:book_id")do
+patch("/admin/books/:book_id")do
 @book = Book.find(params[:book_id])
 @book.update(params[:name])
-erb(:book)
+erb(:book_admin)
 end
 
-get("/patrons/:id/authors/:author_id/edit")do
-@patron = Patron.find(params[:id])
+get("/admin/authors/:author_id/edit")do
   @author = Author.find(params[:author_id])
   erb(:edit_author)
 end
 
 
-patch("/patrons/:id/authors/:author_id")do
+patch("/admin/authors/:author_id")do
 @author = Author.find(params[:author_id])
 @author.update(params[:name])
-erb(:author)
+erb(:author_admin)
 end
 
 delete("/patrons/:id")do
@@ -127,16 +183,16 @@ delete("/patrons/:id")do
 end
 
 
-delete("/patrons/:id/books/:book_id")do
+delete("/admin/books/:id")do
   book = Book.find(params[:id])
   book.delete
-  redirect to ("/books")
+  redirect to ("/admin")
 end
 
-delete("/patrons/:id/authors/:author_id")do
+delete("/admin/authors/:author_id")do
   author = Author.find(params[:author_id])
   author.delete
-  redirect to ("/authors")
+  redirect to ("/admin")
 end
 
 get("/patrons/:id/books") do
@@ -154,8 +210,6 @@ patch("/patrons") do
     redirect to ("/")
   else
     @patron = Patron.find(results.pop)
-    # params[:id] = @patron.id
-    # binding.pry
     redirect to ("/patrons/"+@patron.id)
   end
 
