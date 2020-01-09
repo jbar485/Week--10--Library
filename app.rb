@@ -147,6 +147,12 @@ patch("/patrons/:id/books/:book_id/checkout") do
   redirect to("/patrons/"+patron.id)
 end
 
+patch("/patrons/:id/books/:book_id/return") do
+  DB.exec("DELETE FROM books_patrons WHERE patron_id = #{params[:id]} AND book_id = #{params[:book_id]}")
+  patron = Patron.find(params[:id])
+  redirect to("/patrons/"+patron.id)
+end
+
 get("/patrons/:id/authors/:author_id")do
   @patron = Patron.find(params[:id])
   @author = Author.find(params[:author_id])

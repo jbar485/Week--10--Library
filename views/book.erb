@@ -12,7 +12,19 @@
   <br>
   <a href="/patrons/<%= @patron.id %>">Home</a>
 
+  <% if @patron.is_checked_out(@book) == true %>
+  <form action="/patrons/<%= @patron.id %>/books/<%= @book.id %>/checkout" method="post">
+    <input name="_method" type="hidden" value="patch">
+    <button type="submit" name="button">Renew</button>
+  </form>
+  <form action="/patrons/<%= @patron.id %>/books/<%= @book.id %>/return" method="post">
+    <input name="_method" type="hidden" value="patch">
+    <button type="submit" name="button">Return</button>
+  </form>
+  <%else%>
+
   <form action="/patrons/<%= @patron.id %>/books/<%= @book.id %>/checkout" method="post">
     <input name="_method" type="hidden" value="patch">
     <button type="submit" name="button">Checkout</button>
   </form>
+  <%end%>
